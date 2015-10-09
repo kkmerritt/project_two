@@ -1,7 +1,7 @@
 var express = require('express'),
   PORT = process.env.PORT || 6667,
   server = express(),
-  MONGOURI = process.env.MONGOLAB_URI,
+  MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017",
   dbname = "project_two_db"
   mongoose = require('mongoose');
 
