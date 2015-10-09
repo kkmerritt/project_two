@@ -1,12 +1,16 @@
 var express = require('express'),
   PORT = process.env.PORT || 6667,
-  server = express();
+  server = express(),
+  MONGOURI = process.env.MONGOLAB_URI,
+  dbname = "project_two_db"
+  mongoose = require('mongoose');
 
   server.get('/test', function(req, res){
     res.write("fuck off");
     res.end();
   });
 
+mongoose.connect(MONGOURI + "/" + dbname)
   server.listen(PORT,function(){
     console.log("SERVER IS UP ON PORT:", PORT);
   })
