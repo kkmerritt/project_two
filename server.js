@@ -1,22 +1,21 @@
 // NOTE: ----------------------  Kevin Merritt, Post Poster
 // NOTE: ----------------------  This is the server.
 
-PORT = process.env.PORT || 6667,
-server = express(),
-MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017",
-dbname = "project_two_db"
-mongoose = require('mongoose');
+
 
 var express    = require('express'),
-  mongoose = require('mongoose'),
   ejs        = require('ejs'),
   bodyParser = require('body-parser'),
   methodOverride = require('method-override'),
   // expressLayouts = require('express-ejs-layouts'),
-  Schema     = mongoose.Schema,
+  // Schema     = mongoose.Schema,
   morgan     = require('morgan');
 
-
+  PORT = process.env.PORT || 6667,
+  server = express(),
+  MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017",
+  dbname = "project_two_db"
+  mongoose = require('mongoose');
 
 
 server.set('views', './views'); // tells the renderer where to find templates
