@@ -5,10 +5,10 @@ var express = require('express'),
   dbname = "project_two_db"
   mongoose = require('mongoose');
 
-  
+
   server.use(express.static('public'));
 
-  server.get('/test', function(req, res){
+  server.get('/index', function(req, res){
     res.write("fuck off");
     res.end();
   });
