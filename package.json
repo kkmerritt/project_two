@@ -18,7 +18,13 @@
   },
   "homepage": "https://github.com/kkmerritt/project_two#readme",
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "bootstrap": "^3.3.5",
     "express": "^4.13.3",
-    "mongoose": "^4.1.10"
+    "express-ejs-layouts": "^1.1.0",
+    "express-session": "^1.11.3",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.1.10",
+    "morgan": "^1.6.1"
   }
 }
