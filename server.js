@@ -7,7 +7,7 @@ var express    = require('express'),
   bodyParser = require('body-parser'),
   mongoose   = require('mongoose'),
   methodOverride = require('method-override'),
-  expressLayouts = require('express-ejs-layouts'),
+  // expressLayouts = require('express-ejs-layouts'),
   dbURL      = 'mongodb://localhost:27017/users',
   Schema     = mongoose.Schema,
   morgan     = require('morgan');
@@ -19,7 +19,7 @@ server.use(express.static(__dirname + '/public')); //location for static files (
 server.use(bodyParser.urlencoded({extended: true})); // So we can parse incoming forms into Objects
 server.use(methodOverride('_method'));
 server.use(morgan('short'));
-server.use(expressLayouts);
+// server.use(expressLayouts);
 
 PORT = process.env.PORT || 6667,
 server = express(),
@@ -28,14 +28,10 @@ dbname = "project_two_db"
 mongoose = require('mongoose');
 
 
-server.use(express.static('public'));
-
 // NOTE: ---------------------- Server Functions
 server.get('/', function (req, res) {
   res.render('index')
 });
-
-
 
 
 mongoose.connect(MONGOURI + "/" + dbname)
