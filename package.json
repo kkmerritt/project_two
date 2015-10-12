@@ -1,7 +1,7 @@
 {
   "name": "project_two",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Forum using Databases",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/kkmerritt/project_two.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Kevin Merritt",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kkmerritt/project_two/issues"
   },

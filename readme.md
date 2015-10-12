@@ -6,10 +6,10 @@ General Assembly
   boostrap, mongoose, jquery, mongodb, express, node.js, express layouts, morgan, session.
 
 #PRODUCED ON:
-  system76 pangolin performance
-  running Linux, Ubuntu 15
-  sitting on Tone Fitness 65 cm exercise ball
-  drinking CuP on Norman Coffee, Bells Two-Hearted Ale.
+  system76: pangolin performance
+  running: Linux, Ubuntu 15
+  sitting: on Tone Fitness 65 cm exercise ball
+  drinking: CuP on Norman Coffee, Bells Two-Hearted Ale.
 
 # CREDITS:
   [Bootstrap](http://getbootstrap.com/) framework created by: [Mark Otto] and [Jacob Thorton]

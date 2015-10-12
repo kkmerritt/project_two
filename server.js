@@ -2,18 +2,17 @@
 // NOTE: ----------------------  This is the server.
 
 
-var express    = require('express'),
-  ejs        = require('ejs'),
-  bodyParser = require('body-parser'),
+var express      = require('express'),
+  ejs            = require('ejs'),
+  bodyParser     = require('body-parser'),
   methodOverride = require('method-override'),
   expressLayouts = require('express-ejs-layouts'),
-  // Schema     = mongoose.Schema,
-  morgan     = require('morgan');
+  morgan         = require('morgan');
 
   PORT = process.env.PORT || 3000,
     server = express(),
-  MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017",
-    dbname = "project_two_db"
+  MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
+    dbname = "forumDB"
     mongoose = require('mongoose');
 
 
@@ -26,9 +25,44 @@ server.use(methodOverride('_method'));
 server.use(morgan('short'));
 server.use(expressLayouts);
 
+mongoose.connect(MONGOURI + "/" + dbname)
+server.listen(PORT,function(){
+  console.log("SERVER IS UP ON PORT:", PORT);
+})
+var db = mongoose.connection;
+
+db.on('error', function(){
+  console.log("DATABASE: CONNECTION ERROR: " + dbname)
+})
+db.once('open', function(){
+  console.log("DATABSE: CONNECTED: " + dbname)
+})
 
 
-// NOTE: ---------------------- Server Functions
+// NOTE: ---------------------- DATABASE
+// Schema = mongoose.Schema;
+var Post = mongoose.model("post",{
+            author: String,
+            content: {type: String, maxlength: 200 }
+});
+
+var newPost = new Post({       //test post.
+  author: "Kevin Test",
+  content: "Lorem Ipsum."
+});
+
+newPost.save(function(err, post){
+  if (err){
+    console.log("POST ERROR");
+    console.log(err);
+  } else {
+    console.log("POST SAVED");
+    console.log(post)
+  }
+})
+
+
+// NOTE: ---------------------- Server GET base render functions
 server.get('/', function (req, res) {
   res.render('index')
 });
@@ -44,7 +78,4 @@ server.get('/contact', function (req, res) {
   res.render('contact')
 });
 
-mongoose.connect(MONGOURI + "/" + dbname)
-server.listen(PORT,function(){
-  console.log("SERVER IS UP ON PORT:", PORT);
-})
+// NOTE: ---------------------- Server functions
