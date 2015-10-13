@@ -7,8 +7,9 @@ var express      = require('express'),
   bodyParser     = require('body-parser'),
   methodOverride = require('method-override'),
   expressLayouts = require('express-ejs-layouts'),
-  morgan         = require('morgan');
+  morgan         = require('morgan'),
   session        = require('express-session');
+
 
 
   PORT = process.env.PORT || 3000,
@@ -42,37 +43,26 @@ db.once('open', function(){
 
 
 // NOTE: ---------------------- DATABASE
-var Post = mongoose.model("post",{
-            email: String,
-            date: String,
-            content: String,
-            avatar: String,
-});
+Schema         = mongoose.Schema;
 
-// NOTE this is for testing only ---------------------------------------
-// var newPost = new Post({       //test post.
-//   email: "Kevin Test",
-//   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-// });
-//
-// newPost.save(function(err, post){
-//   if (err){
-//     console.log("POST ERROR");
-//     console.log(err);
-//   } else {
-//     console.log("POST SAVED");
-//     console.log(post)
-//   }
-// })
-// NOTE this is for testing only ---------------------------------------
+var postSchema = new Schema ({
+                email: String,
+                date: String,
+                content: String,
+                avatar: String,
+                comments: [{ body: String, date: Date }]
+              },
+                {collection: 'post', strict: false})
+
+var Post = mongoose.model("post", postSchema)
 
 // NOTE: ---------------------- Server Routes
 server.get('/', function (req, res) {  //this is the / page. Should display all the current posts.
   Post.find({}, function (err, allPosts) {
     if (err) {
-      console.log("ERROR. for fuck sakes", err);   //don't fix this late.
+      console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this late.
     } else {
-      console.log("allPosts= ", allPosts)
+      // console.log("allPosts= ", allPosts)
       res.render('index', {
         post: allPosts
       });
@@ -95,7 +85,7 @@ server.get('/contact', function (req, res) {
 server.post('/submit', function (req, res) {
   newPost = new Post(req.body.post); //throw the variable into the schema
    newPost.save(function(err, data) {
-    if(err) {console.log("POST ENTRY ERROR: ", err);}
+    if(err) {console.log("POST ENTRY ERROR: for fuck's sake. ", err);}
     else {
       console.log("Processed a new database document", data)
       res.redirect(302, "/")};
