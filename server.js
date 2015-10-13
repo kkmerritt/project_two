@@ -44,6 +44,7 @@ db.once('open', function(){
 // NOTE: ---------------------- DATABASE
 var Post = mongoose.model("post",{
             author: String,
+            date: String,
             content: String,
 });
 

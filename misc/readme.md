@@ -12,8 +12,9 @@ General Assembly
   drinking: CuP on Norman Coffee, Bells Two-Hearted Ale.
 
 # CREDITS:
-  [Bootstrap](http://getbootstrap.com/) framework created by: [Mark Otto] and [Jacob Thorton]
-  [Iron Summit Media Strategies](http://www.ironsummitmedia.com/) Start Bootstrap Template by David Miller
+  [Bootstrap](http://getbootstrap.com/) Bootstrap framework by: [Mark Otto] and [Jacob Thorton]
+  [Iron Summit Media Strategies](http://www.ironsummitmedia.com/) Bootstrap Template by David Miller
+  [WebDeveloper.com](http://www.webdeveloper.com/forum/member.php?29207-balloonbuffoon) Code script for an AUTO DATE in html.
 
 # GIT HUB / WIREFRAME IMAGES
   [GitHub KKMERRITT](https://github.com/kkmerritt/project_two)
