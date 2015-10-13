@@ -63,7 +63,7 @@ newPost.save(function(err, post){
 })
 
 // NOTE: ---------------------- Server Routes
-server.get('/', function (req, res) {  //this is the / page. Should display all the current posts.
+server.get('/index', function (req, res) {  //this is the / page. Should display all the current posts.
   Post.find({}, function (err, allPosts) {
     if (err) {
       console.log("ERROR. for fuck sakes", err);   //don't fix this late.
