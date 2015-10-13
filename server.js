@@ -42,15 +42,15 @@ db.once('open', function(){
 
 
 // NOTE: ---------------------- DATABASE
-var Post = mongoose.model("Post",{
+var Post = mongoose.model("post",{
             author: String,
             content: String,
 });
 
-var newPost = new Post({       //test post.
-  author: "Kevin Test",
-  content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-});
+// var newPost = new Post({       //test post.
+//   author: "Kevin Test",
+//   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+// });
 
 newPost.save(function(err, post){
   if (err){
@@ -70,7 +70,7 @@ server.get('/', function (req, res) {  //this is the / page. Should display all 
     } else {
       console.log("allPosts= ", allPosts)
       res.render('index', {
-        Post: allPosts
+        post: allPosts
       });
     }
   });
@@ -89,7 +89,7 @@ server.get('/contact', function (req, res) {
 });
 
 server.post('/submit', function (req, res) {
-  newPost = new Post(req.body.Post); //throw the variable into the schema
+  newPost = new Post(req.body.post); //throw the variable into the schema
    newPost.save(function(err, data) {
     if(err) {console.log("POST ENTRY ERROR: ", err);}
     else {
