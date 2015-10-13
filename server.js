@@ -8,6 +8,8 @@ var express      = require('express'),
   methodOverride = require('method-override'),
   expressLayouts = require('express-ejs-layouts'),
   morgan         = require('morgan');
+  session        = require('express-session');
+
 
   PORT = process.env.PORT || 3000,
     server = express(),
@@ -40,15 +42,14 @@ db.once('open', function(){
 
 
 // NOTE: ---------------------- DATABASE
-// Schema = mongoose.Schema;
-var Post = mongoose.model("post",{
+var Post = mongoose.model("Post",{
             author: String,
-            content: {type: String, maxlength: 200 }
+            content: String,
 });
 
 var newPost = new Post({       //test post.
   author: "Kevin Test",
-  content: "Lorem Ipsum."
+  content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 });
 
 newPost.save(function(err, post){
@@ -61,10 +62,18 @@ newPost.save(function(err, post){
   }
 })
 
-
-// NOTE: ---------------------- Server GET base render functions
-server.get('/', function (req, res) {
-  res.render('index')
+// NOTE: ---------------------- Server Routes
+server.get('/', function (req, res) {  //this is the / page. Should display all the current posts.
+  Post.find({}, function (err, allPosts) {
+    if (err) {
+      console.log("ERROR. for fuck sakes", err);   //don't fix this late.
+    } else {
+      console.log("allPosts= ", allPosts)
+      res.render('index', {
+        Post: allPosts
+      });
+    }
+  });
 });
 
 server.get('/submit', function (req, res) {
@@ -74,8 +83,17 @@ server.get('/submit', function (req, res) {
 server.get('/user', function (req, res) {
   res.render('user')
 });
+
 server.get('/contact', function (req, res) {
   res.render('contact')
 });
 
-// NOTE: ---------------------- Server functions
+server.post('/submit', function (req, res) {
+  newPost = new Post(req.body.Post); //throw the variable into the schema
+   newPost.save(function(err, data) {
+    if(err) {console.log("POST ENTRY ERROR: ", err);}
+    else {
+      console.log("Processed a new database document", data)
+      res.redirect(302, "/")};
+  })
+})
