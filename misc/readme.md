@@ -17,7 +17,7 @@ General Assembly
   [WebDeveloper.com](http://www.webdeveloper.com/forum/member.php?29207-balloonbuffoon) Code script for an AUTO DATE in html.
 
 # GIT HUB / WIREFRAME IMAGES
-  [GitHub KKMERRITT](https://github.com/kkmerritt/project_two)
+  [GitHub KKMERRITT](https://github.com/kkmerritt/project_two/misc)
 
 # TECHNICAL CHALLENGES:
 
