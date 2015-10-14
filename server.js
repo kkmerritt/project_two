@@ -95,7 +95,7 @@ server.post('/postdir/:id/comment', function(req, res){
 server.get('/postdir/:id', function(req, res){
   var postID = req.params.id;
   Post.findById(postID, function(err, thisPost){
-    if (err){console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this later
+    if (err){console.log("FIND POST DATABASE ERROR. for fuck's sake", err);   //don't fix this later
     } else {res.render('postdir/thispost', {post: thisPost})}
   });
 });
@@ -106,10 +106,29 @@ server.get('/userdir/newuser', function(req,res){res.render('userdir/newuser')})
 server.post('/userdir/newuser', function(req, res){
   var newUser = new User(req.body.user);
   newUser.save(function(err, thisUser){
-    if(err){console.log("USER ENTRY ERROR: for fuck's sake. "), res.redirect(302,"/userdir/newuser");}
+    if(err){console.log("NEW USER ENTRY ERROR: for fuck's sake. "), res.redirect(302,"/userdir/newuser");}
     else {console.log("Processed a new database user document", thisUser), res.redirect(302, "/userdir/"+ thisUser._id)};
   })
 })
+
+// display the submit user form
+server.get('/userdir/signin', function(req,res){res.render('userdir/signin')});
+
+server.post('/userdir/signin', function(req, res){
+  var thisSignin = req.body.user;
+  User.findOne({email: thisSignin.email}, function(err, user){
+    if (user && user.password === thisSignin.password){
+      req.session.currentUser = user.email;
+      currentUser = req.session.currentUser;  //this is bullshit added for the welcome page.
+      console.log("req.session.currentUser set to: " + req.session.currentUser);
+      res.redirect(301, "/userdir/welcome")
+    } else {
+      console.log("user sign in failed.");
+      res.redirect(302, '/404')
+    }
+  });
+});
+server.get('/userdir/welcome', function(req, res){res.render('userdir/welcome')});
 
  //display a user page...eventually.
  server.get('/userdir/:id', function(req, res){
