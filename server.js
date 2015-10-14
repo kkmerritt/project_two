@@ -8,8 +8,8 @@ var express      = require('express'),
   methodOverride = require('method-override'),
   expressLayouts = require('express-ejs-layouts'),
   morgan         = require('morgan'),
-  session        = require('express-session');
-
+  session        = require('express-session'),
+  Post           = require('./models/post.js');
 
 
   PORT = process.env.PORT || 3000,
@@ -42,20 +42,6 @@ db.once('open', function(){
 })
 
 
-// NOTE: ---------------------- DATABASE
-Schema         = mongoose.Schema;
-
-var postSchema = new Schema ({
-                email: String,
-                date: String,
-                title: String,
-                content: String,
-                avatar: String,
-                comments: String,
-              },
-                {collection: 'post', strict: false})
-
-var Post = mongoose.model("post", postSchema)
 
 // NOTE: ---------------------- Server Routes
 server.get('/', function (req, res) {
