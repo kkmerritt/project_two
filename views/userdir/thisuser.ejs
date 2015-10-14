@@ -1,16 +1,28 @@
+
 <div class="container">
+
   <div class="row">
-      <div class="box">
+    <div class="box">
+      <div class="col-lg-12">
         <hr>
         <h2 class="intro-text text-center">THIS
-            <strong>USER</strong>
-        </h2><hr>
+          <strong>USER</strong>
           <div class="col-lg-12 text-center">
-          <br>
 
+          <h5>USER ID: <%= user.id %> </h5>
+          <h1> &#9775; <%= user.avatar %> </h1>
+          <h4> Post By: <b><font color= #C64044> <%= user.email %></font></b></h4><br>
+          <hr> <h3>COMMENTS</h3>
+
+          <% user.comment.forEach(function (comment, i) { %>
+            <div class="col-lg-12 text-center">
+              <p> <%= comment %> </p>
+              <hr>
+            </div> <% }) %>
+</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
-<!-- /.container -->
+    <!-- /.container -->

@@ -52,6 +52,7 @@ server.use(function (req, res, next){
 
 // NOTE: ---------------------- Server Routes
 server.get('/', function(req, res){res.render('index')});
+server.get('/404', function(req,res){res.render('404')})//error page.
 
 // display all the posts, this should act as a sort of index.
 server.get('/allposts', function(req, res){
@@ -61,9 +62,6 @@ server.get('/allposts', function(req, res){
   });
 });
 
-// display the submit post form
-server.get('/submitpost', function(req, res){res.render('submitpost')});
-
 // construct a new post item, upload to DB.
 server.post('/submitpost', function(req, res){
   var newPost = new Post(req.body.post); //throw the variable into the schema
@@ -72,6 +70,9 @@ server.post('/submitpost', function(req, res){
   else {console.log("Processed a new database document", data), res.redirect(302, "/allposts")};
   })
 });
+
+// display the submit post form
+server.get('/submitpost', function(req, res){res.render('submitpost')});
 
 // post a new comment to a post thread
 server.post('/postdir/:id/comment', function(req, res){
@@ -103,14 +104,20 @@ server.get('/postdir/:id', function(req, res){
 server.get('/userdir/newuser', function(req,res){res.render('userdir/newuser')});
 
 server.post('/userdir/newuser', function(req, res){
-  var newUser = new User(req.body.user)
-  newUser.save(function(err, user){
-    console.log(newUser)
-    if(err){console.log("USER ENTRY ERROR: for fuck's sake. ", err), res.redirect(302,"/");}
-    else {console.log("Processed a new database user document", data), res.redirect(302, "/userdir/"+ user._id)};
+  var newUser = new User(req.body.user);
+  newUser.save(function(err, thisUser){
+    if(err){console.log("USER ENTRY ERROR: for fuck's sake. "), res.redirect(302,"/userdir/newuser");}
+    else {console.log("Processed a new database user document", thisUser), res.redirect(302, "/userdir/"+ thisUser._id)};
   })
 })
 
-server.get('/userdir/:id', function(req, res){res.render('/allposts')}) //display a user page...eventually.
-
-server.get('/404', function(req,res){res.render('404')})//error page.
+ //display a user page...eventually.
+ server.get('/userdir/:id', function(req, res){
+   var userID = req.params.id;
+   User.findById(userID, function(err, thisUser){
+     if (err){
+       console.log("FIND USER DB ERROR: for fuck's sake");
+       res.redirect(302,"/404");
+   } else {res.render('userdir/thisuser', {user: thisUser})}
+ })
+})

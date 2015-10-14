@@ -2,9 +2,9 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var userSchema = new Schema ({
-  email: { String },
-  password: { String},
-  avatar: {String },
+  email:  String,
+  password:  String,
+  avatar: String ,
   comment: []
 },{collection: 'user', strict: false})
 
