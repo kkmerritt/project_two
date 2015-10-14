@@ -9,7 +9,7 @@
                     </h2>
                     <hr>
                     <p>USER INPUT FORM HERE</p>
-                    <form role="form" action="/userdir/new" method="post">
+                    <form role="form" action="/userdir/newuser" method="post">
                         <div class="row">
 
                             <div class="form-group col-lg-4">
@@ -20,10 +20,14 @@
                                 <label>Password</label>
                                 <input type="text" name=user[password] class="form-control" placeholder="insecurepassword">
                             </div>
-
+                            <div class="form-group col-lg-4">
+                                <label>Avatar</label>
+                                <input type="text" name=user[avatar] class="form-control" placeholder="pictures here">
+                            </div>
                             <div class="clearfix"></div>
                             <div class="form-group col-lg-12">
-                                <input type="hidden" name="save" value="submit">
+                              <input type="hidden" name=user[comment] value=[]>
+                              <input type="hidden" value="submit">
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </div>
                         </div>

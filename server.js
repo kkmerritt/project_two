@@ -10,6 +10,7 @@ var express      = require('express'),
   morgan         = require('morgan'),
   session        = require('express-session'),
   Post           = require('./models/post.js');
+  User           = require('./models/user.js');
 
   PORT = process.env.PORT || 3000, server = express(),
   MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
@@ -24,7 +25,6 @@ server.use(session({
   resave: true,
   saveUninitialized: false
 }));
-
 
 server.use(express.static(__dirname + '/public')); //location for static files (not templates e.g. css, js, img)
 server.use(bodyParser.urlencoded({extended: true})); // So we can parse incoming forms into Objects
@@ -50,10 +50,10 @@ server.use(function (req, res, next){
   next()
 });
 
-
 // NOTE: ---------------------- Server Routes
 server.get('/', function(req, res){res.render('index')});
 
+// display all the posts, this should act as a sort of index.
 server.get('/allposts', function(req, res){
   Post.find({}, function(err, allPosts){
     if (err){console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this later
@@ -61,8 +61,10 @@ server.get('/allposts', function(req, res){
   });
 });
 
+// display the submit post form
 server.get('/submitpost', function(req, res){res.render('submitpost')});
 
+// construct a new post item, upload to DB.
 server.post('/submitpost', function(req, res){
   var newPost = new Post(req.body.post); //throw the variable into the schema
   newPost.save(function(err, data){
@@ -71,15 +73,7 @@ server.post('/submitpost', function(req, res){
   })
 });
 
-// an individual post no creation
-// server.post('/postdir/:id', function(req, res){//this is the individual page. Should display a post with comments
-//   var postID = req.params.id;
-//   Post.findById(postID, function(err, thisPost){
-//     if (err){console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this later
-//     } else {res.render('postdir/thispost', {post: thisPost })}
-//   });
-// });
-
+// post a new comment to a post thread
 server.post('/postdir/:id/comment', function(req, res){
   console.log("accessed the post comment route");
   Post.findById(req.params.id, function (err, foundPost) {
@@ -96,7 +90,7 @@ server.post('/postdir/:id/comment', function(req, res){
   });
 });
 
-// an individual post no creation
+// an individual post displayed, no manip
 server.get('/postdir/:id', function(req, res){
   var postID = req.params.id;
   Post.findById(postID, function(err, thisPost){
@@ -104,3 +98,19 @@ server.get('/postdir/:id', function(req, res){
     } else {res.render('postdir/thispost', {post: thisPost})}
   });
 });
+
+// display the submit user form
+server.get('/userdir/newuser', function(req,res){res.render('userdir/newuser')});
+
+server.post('/userdir/newuser', function(req, res){
+  var newUser = new User(req.body.user)
+  newUser.save(function(err, user){
+    console.log(newUser)
+    if(err){console.log("USER ENTRY ERROR: for fuck's sake. ", err), res.redirect(302,"/");}
+    else {console.log("Processed a new database user document", data), res.redirect(302, "/userdir/"+ user._id)};
+  })
+})
+
+server.get('/userdir/:id', function(req, res){res.render('/allposts')}) //display a user page...eventually.
+
+server.get('/404', function(req,res){res.render('404')})//error page.
