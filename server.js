@@ -2,6 +2,8 @@
 // NOTE: ----------------------  Forum Project
 // NOTE: ----------------------  Server.js
 
+// NOTE:      current user to be used throughout site:     login/email: req.session.currentUser
+
 var express      = require('express'),
   ejs            = require('ejs'),
   bodyParser     = require('body-parser'),
@@ -9,28 +11,30 @@ var express      = require('express'),
   expressLayouts = require('express-ejs-layouts'),
   morgan         = require('morgan'),
   session        = require('express-session'),
-  Post           = require('./models/post.js');
-  User           = require('./models/user.js');
+  Post           = require('./models/post.js'),
+  User           = require('./models/user.js'),
+  logger         = require('./misc/logger.js');
 
-  PORT = process.env.PORT || 3000, server = express(),
-  MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
-    dbname = "forumDB", mongoose = require('mongoose');
+PORT = process.env.PORT || 3000, server = express(),
+MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
+  dbname = "forumDB", mongoose = require('mongoose');
 
 // NOTE: ---------------------- Activate / Use Middleware
 server.set('view engine', 'ejs'); // tells the render method, what to use
 server.set('views', './views'); // tells the renderer where to find templates
 
 server.use(session({
-  secret: "password",
+  secret: "1234",
   resave: true,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 
 server.use(express.static(__dirname + '/public')); //location for static files (not templates e.g. css, js, img)
 server.use(bodyParser.urlencoded({extended: true})); // So we can parse incoming forms into Objects
 server.use(methodOverride('_method'));
-server.use(morgan('short'));
+server.use(morgan('dev'));
 server.use(expressLayouts);
+
 
 // NOTE: ---------------------- Server & Database Connections
 mongoose.connect(MONGOURI + "/" + dbname)
@@ -40,21 +44,32 @@ var db = mongoose.connection;
 db.on('error', function(){console.log("DATABASE: CONNECTION ERROR: for fuck's sake. " + dbname)})
 db.once('open', function(){console.log("DATABASE: CONNECTED: " + dbname)})
 
-//NOTE  ----------------logger-----------------//
-server.use(function (req, res, next){
-  console.log("--------------------REQ START-----------\n");
-  console.log("REQ DOT BODY\n", req.body);
-  console.log("REQ DOT PARAMS\n", req.params);
-  console.log("REQ DOT SESSION\n", req.session);
-  console.log("--------------------REQ END-----------\n");
-  next()
-});
 
 // NOTE: ---------------------- Server Routes
-server.get('/', function(req, res){res.render('index')});
+
+server.use(logger);
+
+server.get('/', function(req, res){res.locals.author = undefined; res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
 
-// display all the posts, this should act as a sort of index.
+// display the submit user form (initial page)
+// construct a new user object, upload to DB.
+// set the session, so that the user (.email) persists throughout website
+server.post('/', function(req, res){
+  var thisLogin = req.body.user;
+  User.findOne({email: thisLogin.email}, function(err, thisUser){
+        if (thisUser && thisUser.password === thisLogin.password){
+      req.session.currentUser = thisUser.email;
+      console.log("req.session.currentUser set to: " + req.session.currentUser);
+      res.render("welcome")
+    } else {
+      console.log("user sign in failed.");
+      res.redirect(302, '/404');
+    }
+  });
+});
+
+// display all the posts, does not require login
 server.get('/allposts', function(req, res){
   Post.find({}, function(err, allPosts){
     if (err){console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this later
@@ -62,36 +77,35 @@ server.get('/allposts', function(req, res){
   });
 });
 
+
+// display the submit post form
 // construct a new post item, upload to DB.
+server.get('/submitpost', function(req, res){res.render('submitpost')});
+
 server.post('/submitpost', function(req, res){
-  var newPost = new Post(req.body.post); //throw the variable into the schema
+  var newPost = new Post(req.body.post);
   newPost.save(function(err, data){
-  if(err){console.log("POST ENTRY ERROR: for fuck's sake. ", err), res.redirect(302,"/submitpost");}
+  if(err){console.log("POST ENTRY ERROR: for fuck's sake. ", err), res.redirect(302,"/404");}
   else {console.log("Processed a new database document", data), res.redirect(302, "/allposts")};
   })
 });
 
-// display the submit post form
-server.get('/submitpost', function(req, res){res.render('submitpost')});
-
-// post a new comment to a post thread
+// post a comment to a post
 server.post('/postdir/:id/comment', function(req, res){
   console.log("accessed the post comment route");
-  Post.findById(req.params.id, function (err, foundPost) {
-      if (err) { console.log("ERRbody in the club..", err) }
+  Post.findById(req.params.id, function (err, thisPost) {
+      if (err) {console.log("ERROR in COMMENT POST for fucks's sake."); res.redirect(302, "/404") }
       else {
-        foundPost.comment.push(req.body.post.comment) // english what? [inspiractional quote courtesy of @short_stack]
-        foundPost.save(function (saveErr, savedPost) {
-          if (saveErr) { console.log("MORE ERR", saveErr) }
-          else {
-            res.redirect(302, '/postdir/'  + req.params.id)
-          }
+        thisPost.comment.push(req.body.post.comment) // english what? [inspiractional quote courtesy of @short_stack]
+        thisPost.save(function (saveErr, savedPost) {
+          if (saveErr) { console.log("ERROR in comment save....", saveErr) }
+          else {res.redirect(302, '/postdir/'  + req.params.id)}
         })
       }
   });
 });
 
-// an individual post displayed, no manip
+// get an individual post, see comments
 server.get('/postdir/:id', function(req, res){
   var postID = req.params.id;
   Post.findById(postID, function(err, thisPost){
@@ -101,6 +115,7 @@ server.get('/postdir/:id', function(req, res){
 });
 
 // display the submit user form
+//
 server.get('/userdir/newuser', function(req,res){res.render('userdir/newuser')});
 
 server.post('/userdir/newuser', function(req, res){
@@ -111,32 +126,14 @@ server.post('/userdir/newuser', function(req, res){
   })
 })
 
-// display the submit user form
-server.get('/userdir/signin', function(req,res){res.render('userdir/signin')});
 
-server.post('/userdir/signin', function(req, res){
-  var thisSignin = req.body.user;
-  User.findOne({email: thisSignin.email}, function(err, user){
-    if (user && user.password === thisSignin.password){
-      req.session.currentUser = user.email;
-      currentUser = req.session.currentUser;  //this is bullshit added for the welcome page.
-      console.log("req.session.currentUser set to: " + req.session.currentUser);
-      res.redirect(301, "/userdir/welcome")
-    } else {
-      console.log("user sign in failed.");
-      res.redirect(302, '/404')
-    }
-  });
-});
-server.get('/userdir/welcome', function(req, res){res.render('userdir/welcome')});
-
- //display a user page...eventually.
- server.get('/userdir/:id', function(req, res){
-   var userID = req.params.id;
-   User.findById(userID, function(err, thisUser){
-     if (err){
-       console.log("FIND USER DB ERROR: for fuck's sake");
-       res.redirect(302,"/404");
-   } else {res.render('userdir/thisuser', {user: thisUser})}
- })
+server.get('/userdir/:id', function(req, res){
+  if (req.session.currentUser){
+    var thisLogin = req.session.currentUser;
+    console.log('should be kevin@me.' + thisLogin)
+    User.findOne({email: thisLogin}, function(err, thisUser){
+      console.log('thisUser is :'+thisUser)
+      res.render('userdir/thisuser', {user: thisUser})})
+  } else {
+    res.redirect(302, '/')}
 })
