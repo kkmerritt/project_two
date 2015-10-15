@@ -13,7 +13,7 @@ var express      = require('express'),
   session        = require('express-session'),
   Post           = require('./models/post.js'),
   User           = require('./models/user.js'),
-  logger         = require('./misc/logger.js');
+  logger         = require('./misc/logger.js'),
 
 PORT = process.env.PORT || 3000, server = express(),
 MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
@@ -48,7 +48,7 @@ db.once('open', function(){console.log("DATABASE: CONNECTED: " + dbname)})
 // NOTE: ---------------------- Server Routes
 
 server.use(logger);
-var username = "";
+
 server.get('/', function(req, res){res.locals.author = undefined; res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
 

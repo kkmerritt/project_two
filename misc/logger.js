@@ -1,12 +1,15 @@
 //NOTE  ----------------logger-----------------//
-
+  var eyes           = require('eyespect');
 
 var logger = function (req, res, next){
-  console.log("--------------------REQ START-----------\n");
-  console.log("REQ DOT BODY\n", req.body);
-  console.log("REQ DOT PARAMS\n", req.params);
-  console.log("REQ DOT SESSION\n", req.session);
-  console.log("--------------------REQ END-----------\n");
+  eyes.inspect("--------------------REQ START-----------\n");
+  eyes.inspect("REQ.BODY");
+  eyes.inspect(req.body);
+  eyes.inspect("REQ DOT PARAMS\n");
+  eyes.inspect(req.params);
+  eyes.inspect("REQ DOT SESSION\n");
+  console.log(req.session)
+  eyes.inspect("--------------------REQ END-----------\n");
   next()
 };
 
