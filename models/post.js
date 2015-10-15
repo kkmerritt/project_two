@@ -6,7 +6,7 @@ var postSchema = new Schema ({
   date: String,
   title: String,
   content: String,
-  comment: {body: String, author: String},
+  comment: [],
 },{collection: 'post', strict: false})
 
 var Post = mongoose.model("post", postSchema);

@@ -50,8 +50,16 @@ db.once('open', function(){console.log("DATABASE: CONNECTED: " + dbname)})
 
 server.use(logger);
 
-server.get('/', function(req, res){res.locals.author = undefined; res.render('index');});
+server.get('/', function(req, res){res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
+
+server.get('/logoff', function(req,res){
+// req.session.currentUser = '';
+req.session.destroy();
+
+server.locals.username = "Not Logged In";
+
+  res.render('logoff')})
 
 // display the submit user form (initial page)
 // construct a new user object, upload to DB.
@@ -81,7 +89,10 @@ server.get('/allposts', function(req, res){
 
 // display the submit post form
 // construct a new post item, upload to DB.
-server.get('/submitpost', function(req, res){res.render('submitpost')});
+server.get('/submitpost', function(req, res){
+if (req.session.currentUser){res.render('submitpost')
+} else { res.redirect(302,"/"); }
+});
 
 server.post('/submitpost', function(req, res){
   var newPost = new Post(req.body.post);
@@ -118,7 +129,8 @@ server.get('/postdir/:id', function(req, res){
 // display the submit user form
 //
 server.get('/userdir/newuser', function(req,res){
-  res.render('userdir/newuser');
+  if (req.session.currentUser){ res.render("welcome")}
+  else {res.render('userdir/newuser');}
 });
 
 server.post('/userdir/newuser', function(req, res){
