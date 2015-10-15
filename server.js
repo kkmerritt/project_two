@@ -53,13 +53,12 @@ server.use(logger);
 server.get('/', function(req, res){res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
 
+//log off function, destroys local variables and the session. restricts commenting / post submission
 server.get('/logoff', function(req,res){
-// req.session.currentUser = '';
-req.session.destroy();
-
-server.locals.username = "Not Logged In";
-
-  res.render('logoff')})
+  req.session.destroy();
+  server.locals.username = null;
+  res.render('logoff')
+})
 
 // display the submit user form (initial page)
 // construct a new user object, upload to DB.

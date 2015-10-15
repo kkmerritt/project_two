@@ -20,6 +20,7 @@ General Assembly
   [GitHub KKMERRITT](https://github.com/kkmerritt/project_two/misc)
 
 # TECHNICAL CHALLENGES:
+  Session Syntax, Switching to local variables.
 
 # TECHNICAL ASPECTS:
 
