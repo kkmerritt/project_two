@@ -48,7 +48,7 @@ db.once('open', function(){console.log("DATABASE: CONNECTED: " + dbname)})
 // NOTE: ---------------------- Server Routes
 
 server.use(logger);
-
+var username = "";
 server.get('/', function(req, res){res.locals.author = undefined; res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
 
@@ -60,7 +60,7 @@ server.post('/', function(req, res){
   User.findOne({email: thisLogin.email}, function(err, thisUser){
         if (thisUser && thisUser.password === thisLogin.password){
       req.session.currentUser = thisUser.email;
-      console.log("req.session.currentUser set to: " + req.session.currentUser);
+      res.locals.username = thisUser.email;
       res.render("welcome")
     } else {
       console.log("user sign in failed.");
@@ -68,6 +68,7 @@ server.post('/', function(req, res){
     }
   });
 });
+
 
 // display all the posts, does not require login
 server.get('/allposts', function(req, res){
@@ -126,13 +127,12 @@ server.post('/userdir/newuser', function(req, res){
   })
 })
 
-
+//displays the users page.
 server.get('/userdir/:id', function(req, res){
   if (req.session.currentUser){
     var thisLogin = req.session.currentUser;
-    console.log('should be kevin@me.' + thisLogin)
     User.findOne({email: thisLogin}, function(err, thisUser){
-      console.log('thisUser is :'+thisUser)
+      res.locals.currentUserID = thisUser;
       res.render('userdir/thisuser', {user: thisUser})})
   } else {
     res.redirect(302, '/')}
