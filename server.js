@@ -107,7 +107,10 @@ server.post('/postdir/:id/comment', function(req, res){
   Post.findById(req.params.id, function (err, thisPost) {
       if (err) {console.log("ERROR in COMMENT POST for fucks's sake."); res.redirect(302, "/404") }
       else {
-        thisPost.comment.push(req.body.post.comment) // english what? [inspiractional quote courtesy of @short_stack]
+        var x = req.body.comment;
+        var y = req.body.email;
+
+        thisPost.comments.push(req.body);
         thisPost.save(function (saveErr, savedPost) {
           if (saveErr) { console.log("ERROR in comment save....", saveErr) }
           else {res.redirect(302, '/postdir/'  + req.params.id)}
@@ -115,6 +118,7 @@ server.post('/postdir/:id/comment', function(req, res){
       }
   });
 });
+
 
 // get an individual post, see comments
 server.get('/postdir/:id', function(req, res){
