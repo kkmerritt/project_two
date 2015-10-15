@@ -12,14 +12,35 @@
           <h5>USER ID: <%= user.email %> </h5>
           <h1> &#9775; <%= user.avatar %> </h1>
           <h4> Post By: <b><font color= #C64044> <%= user.email %></font></b></h4><br>
-          <hr> <h3>COMMENTS</h3>
+
+              <hr>
+               <h3>POSTS</h3>
+
+            <% post.forEach(function (post, i) { %>
+              <div class="col-lg-12 text-center">
+                <p> <%= post.title %> </p>
+                <p> <%= post.content %> </p>
+                <hr>
+              </div> <% }) %>
+          <hr>
+
+           <h3>COMMENTS</h3>
 
           <% user.comment.forEach(function (comment, i) { %>
             <div class="col-lg-12 text-center">
               <p> <%= comment %> </p>
               <hr>
             </div> <% }) %>
-</div>
+
+
+
+
+
+
+
+
+
+          </div>
           </div>
         </div>
       </div>

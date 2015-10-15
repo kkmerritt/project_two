@@ -14,6 +14,7 @@ var express      = require('express'),
   Post           = require('./models/post.js'),
   User           = require('./models/user.js'),
   logger         = require('./misc/logger.js'),
+  eyes           = require('eyespect');
 
 PORT = process.env.PORT || 3000, server = express(),
 MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
@@ -58,10 +59,10 @@ server.get('/404', function(req,res){res.render('404')})//error page.
 server.post('/', function(req, res){
   var thisLogin = req.body.user;
   User.findOne({email: thisLogin.email}, function(err, thisUser){
-        if (thisUser && thisUser.password === thisLogin.password){
-      req.session.currentUser = thisUser.email;
-      res.locals.username = thisUser.email;
-      res.render("welcome")
+      if (thisUser && thisUser.password === thisLogin.password){
+        req.session.currentUser = thisUser.email;
+        server.locals.username = thisUser.email;
+        res.render("welcome")
     } else {
       console.log("user sign in failed.");
       res.redirect(302, '/404');
@@ -77,7 +78,6 @@ server.get('/allposts', function(req, res){
     } else {res.render('allposts', {post: allPosts});}
   });
 });
-
 
 // display the submit post form
 // construct a new post item, upload to DB.
@@ -117,7 +117,9 @@ server.get('/postdir/:id', function(req, res){
 
 // display the submit user form
 //
-server.get('/userdir/newuser', function(req,res){res.render('userdir/newuser')});
+server.get('/userdir/newuser', function(req,res){
+  res.render('userdir/newuser');
+});
 
 server.post('/userdir/newuser', function(req, res){
   var newUser = new User(req.body.user);
@@ -126,14 +128,17 @@ server.post('/userdir/newuser', function(req, res){
     else {console.log("Processed a new database user document", thisUser), res.redirect(302, "/userdir/"+ thisUser._id)};
   })
 })
-
 //displays the users page.
 server.get('/userdir/:id', function(req, res){
   if (req.session.currentUser){
     var thisLogin = req.session.currentUser;
-    User.findOne({email: thisLogin}, function(err, thisUser){
-      res.locals.currentUserID = thisUser;
-      res.render('userdir/thisuser', {user: thisUser})})
+    Post.find({ email: thisLogin }, function(err, userPosts){
+      User.findOne({email: thisLogin}, function(err, thisUser){
+        res.locals.currentUserID = thisUser;
+        res.render('userdir/thisuser', {user: thisUser,
+                                        post: userPosts}
+                )})
+              })
   } else {
     res.redirect(302, '/')}
 })
