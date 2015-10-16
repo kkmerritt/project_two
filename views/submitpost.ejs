@@ -12,15 +12,15 @@
                   <form action="/submitpost" method="post" role="form">
                       <div class="row">
                           <div class="form-group col-lg-4">
-                              <label>Email</label>
+                              <label>  <h2 class="intro-text text-center"><strong>email</strong></h2></label>
                               <input type="text" class="form-control" name="post[email]" value='<%= username %>' placeholder="<%= username %>" readonly>
                           </div>
                           <div class="form-group col-lg-4">
-                              <label>Post Title</label>
+                            <label>  <h2 class="intro-text text-center"><strong>post title</strong></h2></label>
                               <input type="text" class="form-control" name=post[title] placeholder="Title">
                           </div>
                         <div class="form-group col-lg-4">
-                          <label> Date </label>
+                          <label>  <h2 class="intro-text text-center"><strong>date</strong></h2></label>
                         <script>
                         var tD = new Date();
                         var datestr = (tD.getMonth()+ 1) + "." + tD.getDate() + "." + tD.getFullYear();
@@ -30,13 +30,12 @@
 
                           <div class="clearfix"></div>
                           <div class="form-group col-lg-12">
-                              <label>Post</label>
+                            <label>  <h2 class="intro-text text-center"><strong>post</strong></h2></label>
                               <textarea class="form-control" rows="6" name=post[content] placeholder="post"></textarea>
                           </div>
 
                           <div class="form-group col-lg-12">
-                              <input type="hidden" name=post.comment[text] value="CHANGE THIS">
-                              <button type="submit" class="btn btn-default">Submit This Post</button>
+                              <button type="submit" class="btn btn-default">SUBMIT THIS POST</button>
                           </div>
                       </div>
                   </form>

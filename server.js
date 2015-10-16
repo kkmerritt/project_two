@@ -80,10 +80,12 @@ server.post('/', function(req, res){
 
 // display all the posts, does not require login
 server.get('/allposts', function(req, res){
-  Post.find({}, function(err, allPosts){
+  if (req.session.currentUser){
+    Post.find({}, function(err, allPosts){
     if (err){console.log("FIND DATABASE ERROR. for fuck's sake", err);   //don't fix this later
     } else {res.render('allposts', {post: allPosts});}
   });
+} else {res.redirect(302, "/404")}
 });
 
 // display the submit post form
@@ -103,13 +105,9 @@ server.post('/submitpost', function(req, res){
 
 // post a comment to a post
 server.post('/postdir/:id/comment', function(req, res){
-  console.log("accessed the post comment route");
   Post.findById(req.params.id, function (err, thisPost) {
       if (err) {console.log("ERROR in COMMENT POST for fucks's sake."); res.redirect(302, "/404") }
       else {
-        var x = req.body.comment;
-        var y = req.body.email;
-
         thisPost.comments.push(req.body);
         thisPost.save(function (saveErr, savedPost) {
           if (saveErr) { console.log("ERROR in comment save....", saveErr) }
@@ -117,8 +115,24 @@ server.post('/postdir/:id/comment', function(req, res){
         })
       }
   });
-});
+  var x = req.session.currentUser;
+  User.find({email: x}, function(err, thisUser) {
+    console.log('thisUser = '+ thisUser)
 
+      if (err) {console.log("ERROR in finding user for fucks's sake."); res.redirect(302, "/404") }
+      else {
+        console.log("alls well, should be push / saving here to thisUser " + thisUser)
+        thisUser.comments.push(req.body);
+        thisUser.save(function (saveErr, savedUser) {
+          if (saveErr) { console.log("ERROR in comment save to userdb....", saveErr) }
+          else {res.redirect(302, '/postdir/'  + req.params.id)}
+        })
+      }
+  });
+
+
+
+}); //end of the server.post
 
 // get an individual post, see comments
 server.get('/postdir/:id', function(req, res){
