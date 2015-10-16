@@ -1,41 +1,107 @@
-    <div class="container">
+<div class="container">
+  <div class="row">
+    <div class="box">
+      <div class="col-lg-12">
+        <hr>
+        <h2 class="intro-text text-center">NEW
+          <strong>USER</strong>
+        </h2>
+        <hr>
+        <form role="form" action="/userdir/newuser" method="post">
+          <div class="row">
 
-        <div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center">NEW
-                        <strong>USER</strong>
-                    </h2>
-                    <hr>
-                    <form role="form" action="/userdir/newuser" method="post">
-                        <div class="row">
-
-                            <div class="form-group col-lg-4">
-                                <label>Email Address</label>
-                                <input type="text" name=user[email] class="form-control" placeholder="margaretThatchersGhost@webcrawler.net">
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label>Password</label>
-                                <input type="text" name=user[password] class="form-control" placeholder="insecurepassword">
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label>Avatar</label>
-                                <input type="text" name=user[avatar] class="form-control" placeholder="pictures here">
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="form-group col-lg-12">
-                              <!-- NOTE: may need to input coment value of array here -->
-                              <!-- <input type="hidden" name=user[comment]>  -->
-                              <input type="hidden" value="submit">
-
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="form-group col-lg-4">
+              <label>    <h2 class="intro-text text-center">your
+                <strong>email</strong>
+              </h2></label>
+              <input type="text" name=user[email] class="form-control" placeholder="linux4eva@mac.com">
             </div>
-        </div>
+            <div class="form-group col-lg-4">
+              <label>    <h2 class="intro-text text-center">your
+                <strong>password</strong>
+              </h2></label>
+              <input type="text" name=user[password] class="form-control" placeholder="insecurepassword">
+            </div>
+            <div class="form-group col-lg-4">
+              <label>    <h2 class="intro-text text-center">your
+                <strong>avatar</strong>
+              </h2></label>
+              <br>
 
+              <input type="text" class="avatartext" name=user[avatar] data-toggle="modal" data-target="#myModal" id="text"> </input>
+
+              <div class="container">
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog">
+
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">PLEASE CHOOSE AN AVATAR</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p class='avatar'>
+                          <button type="button" id='&#10084;'class="avatar-buttons" onClick='reply_click(this.id)'>&#10084; </button>
+                          <button type="button" id='&#9728;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9728; </button>
+                          <button type="button" id='&#9733;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9733; </button>
+                          <button type="button" id='&#9730;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9730; </button>
+                          <button type="button" id='&#9822;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9822; </button>
+                          <button type="button" id='&#9775;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9775; </button>
+                          <button type="button" id='&#9773;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9773; </button>
+                          <button type="button" id='&#9762;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9762; </button>
+                          <button type="button" id='&#9742;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9742; </button>
+                          <button type="button" id='&#9873;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9873; </button>
+                          <button type="button" id='&#1421;' class="avatar-buttons" onClick='reply_click(this.id)'>&#1421; </button>
+                          <button type="button" id='&#9986;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9986; </button>
+                          <button type="button" id='&#2039;' class="avatar-buttons" onClick='reply_click(this.id)'>&#2039; </button>
+                          <button type="button" id='&#9835;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9835; </button>
+                          <button type="button" id='&#8584;' class="avatar-buttons" onClick='reply_click(this.id)'>&#8584; </button>
+                          <button type="button" id='&#9055;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9055; </button>
+                          <button type="button" id='&#9209;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9209; </button>
+                          <button type="button" id='&#9202;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9202; </button>
+                          <button type="button" id='&#9819;' class="avatar-buttons" onClick='reply_click(this.id)'>&#9819; </button>
+                          <button type="button" id='&#10052;'class="avatar-buttons" onClick='reply_click(this.id)'>&#10052;</button>
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="form-group col-lg-12">
+
+              <input type="hidden" value="submit">
+              <CENTER>
+
+                <button type="submit" class="btn btn-default">SUBMIT</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <!-- /.container -->
+
+  </div>
+
+  <!-- /.container -->
+
+  <!-- scripts -->
+  <script type="text/javascript">
+
+  function reply_click(clicked_id)
+  {
+    var text = $('#text');
+    text.val(clicked_id);
+  }
+
+  </script>

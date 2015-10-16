@@ -2,8 +2,6 @@
 // NOTE: ----------------------  Forum Project
 // NOTE: ----------------------  Server.js
 
-// NOTE:      current user to be used throughout site:     login/email: req.session.currentUser
-
 var express      = require('express'),
   ejs            = require('ejs'),
   bodyParser     = require('body-parser'),
@@ -14,7 +12,7 @@ var express      = require('express'),
   Post           = require('./models/post.js'),
   User           = require('./models/user.js'),
   logger         = require('./misc/logger.js'),
-  eyes           = require('eyespect');
+  eyes           = require('eyespect'),
 
 PORT = process.env.PORT || 3000, server = express(),
 MONGOURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017/users",
@@ -36,6 +34,7 @@ server.use(methodOverride('_method'));
 server.use(morgan('dev'));
 server.use(expressLayouts);
 
+server.use(logger);
 
 // NOTE: ---------------------- Server & Database Connections
 mongoose.connect(MONGOURI + "/" + dbname)
@@ -47,8 +46,6 @@ db.once('open', function(){console.log("DATABASE: CONNECTED: " + dbname)})
 
 
 // NOTE: ---------------------- Server Routes
-
-server.use(logger);
 
 server.get('/', function(req, res){res.render('index');});
 server.get('/404', function(req,res){res.render('404')})//error page.
@@ -71,14 +68,14 @@ server.post('/', function(req, res){
         server.locals.username = thisUser.email;
         res.render("welcome")
     } else {
-      console.log("user sign in failed.");
-      res.redirect(302, '/404');
+      console.log("USER SIGN IN ERROR: fuck's sake. ");
+      res.render('userdir/logfail');
     }
   });
 });
 
 
-// display all the posts, does not require login
+// display all the posts
 server.get('/allposts', function(req, res){
   if (req.session.currentUser){
     Post.find({}, function(err, allPosts){
@@ -99,62 +96,47 @@ server.post('/submitpost', function(req, res){
   var newPost = new Post(req.body.post);
   newPost.save(function(err, data){
   if(err){console.log("POST ENTRY ERROR: for fuck's sake. ", err), res.redirect(302,"/404");}
-  else {console.log("Processed a new database document", data), res.redirect(302, "/allposts")};
+  else {console.log("NEW DB DOC PROCESSED", data), res.redirect(302, "/allposts")};
   })
 });
 
 // post a comment to a post
 server.post('/postdir/:id/comment', function(req, res){
   Post.findById(req.params.id, function (err, thisPost) {
-      if (err) {console.log("ERROR in COMMENT POST for fucks's sake."); res.redirect(302, "/404") }
+      if (err) {console.log("ERROR in COMMENT POST: for fucks's sake."); res.redirect(302, "/404") }
       else {
         thisPost.comments.push(req.body);
         thisPost.save(function (saveErr, savedPost) {
-          if (saveErr) { console.log("ERROR in comment save....", saveErr) }
+          if (saveErr) { console.log("ERROR in COMMENT SAVE: for fuck's sake....", saveErr) }
           else {res.redirect(302, '/postdir/'  + req.params.id)}
         })
       }
   });
-  var x = req.session.currentUser;
-  User.find({email: x}, function(err, thisUser) {
-    console.log('thisUser = '+ thisUser)
-
-      if (err) {console.log("ERROR in finding user for fucks's sake."); res.redirect(302, "/404") }
-      else {
-        console.log("alls well, should be push / saving here to thisUser " + thisUser)
-        thisUser.comments.push(req.body);
-        thisUser.save(function (saveErr, savedUser) {
-          if (saveErr) { console.log("ERROR in comment save to userdb....", saveErr) }
-          else {res.redirect(302, '/postdir/'  + req.params.id)}
-        })
-      }
-  });
-
-
-
 }); //end of the server.post
 
 // get an individual post, see comments
 server.get('/postdir/:id', function(req, res){
   var postID = req.params.id;
   Post.findById(postID, function(err, thisPost){
-    if (err){console.log("FIND POST DATABASE ERROR. for fuck's sake", err);   //don't fix this later
+    if (err){console.log("FIND POST DATABASE ERROR: for fuck's sake", err);   //don't fix this later
     } else {res.render('postdir/thispost', {post: thisPost})}
   });
 });
 
 // display the submit user form
-//
 server.get('/userdir/newuser', function(req,res){
   if (req.session.currentUser){ res.render("welcome")}
   else {res.render('userdir/newuser');}
 });
 
 server.post('/userdir/newuser', function(req, res){
+  if (req.body.user.email == ""){res.redirect(302, "/404");}
+  if (req.body.user.password == ""){res.redirect(302, "/404");}
+  if (req.body.user.avatar == ""){res.redirect(302, "/404");}
   var newUser = new User(req.body.user);
   newUser.save(function(err, thisUser){
     if(err){console.log("NEW USER ENTRY ERROR: for fuck's sake. "), res.redirect(302,"/userdir/newuser");}
-    else {console.log("Processed a new database user document", thisUser), res.redirect(302, "/userdir/"+ thisUser._id)};
+    else {console.log("NEW DB USER Document Processed", thisUser), res.render("userdir/verify")};
   })
 })
 //displays the users page.
@@ -168,6 +150,5 @@ server.get('/userdir/:id', function(req, res){
                                         post: userPosts}
                 )})
               })
-  } else {
-    res.redirect(302, '/')}
+  } else {res.redirect(302, '/')}
 })

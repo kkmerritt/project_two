@@ -5,44 +5,28 @@
     <div class="box">
       <div class="col-lg-12">
         <hr>
-        <h2 class="intro-text text-center">THIS
-          <strong>USER</strong>
-          <div class="col-lg-12 text-center">
-            <hr>
+        <h2 class="intro-text text-center">my
+          <strong>content</strong>
+          <hr>
+          <h1 class="avatar-buttons"><%= user.avatar %> </h1> <h4> posts By: <b><font color= #C64044> <%= user.email %></font></b></h4><br>
+          <hr>
+          <% post.forEach(function (post, i) { %>
+            <div class="col-lg-12">
+              <h2> <%= post.title %> </h2>
+              <h4> <%= post.content %> </h4>
+              <hr>
+            </div> <% }) %>
 
-            <h1> &#9775; <%= user.avatar %> </h1>
-            <h4> Post By: <b><font color= #C64044> <%= user.email %></font></b></h4><br>
-            <hr>
-            <h3>POSTS</h3>
-
-            <% post.forEach(function (post, i) { %>
-              <div class="col-lg-12 text-center">
-                <p> <%= post.title %> </p>
-                <p> <%= post.content %> </p>
+            <h3>COMMENTS</h3>
+            <% user.comments.forEach(function (comment, i) { %>
+              <div class="col-lg-12">
+                <h4> <%= comment %> </h4>
                 <hr>
               </div> <% }) %>
-              <hr>
-
-              <h3>COMMENTS</h3>
-
-              <% user.comments.forEach(function (comment, i) { %>
-                <div class="col-lg-12 text-center">
-                  <p> <%= comment %> </p>
-                  <hr>
-                </div> <% }) %>
-
-
-
-
-
-
-
-
-
-              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- /.container -->
+    <!-- /.container -->

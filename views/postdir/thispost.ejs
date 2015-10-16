@@ -1,42 +1,41 @@
-
 <div class="container">
 
   <div class="row">
     <div class="box">
       <div class="col-lg-12">
         <hr>
-        <h2 class="intro-text text-center">THIS
-          <strong>POST</strong>
+        <h2 class="intro-text text-center">post
+          <strong>content</strong><hr>
           <h4><%= post.date %></h4>
         </h2>
         <h2><%= post.title %></h2>
-        <p><%= post.content %></p>
-        <h4> Post By: <b><font color= #C64044> <%= post.email %></font></b></h4><br>
-        <hr> <h3>COMMENTS</h3>
-
+        <h4><%= post.content %></h4>
+        <h5> Post By: <b><font color= #C64044> <%= post.email %></font></b></h5><br>
+        <hr> <h2>COMMENTS</h2>
         <% post.comments.forEach(function (thisComment, i) { %>
           <div class="col-lg-12">
-            <p> <%= thisComment.text %> </p>
-            <h4> COMMENT By: <b><font color= #C64044> "<%= thisComment.email %>" </font></b></h4><br>
+            <h4> <%= thisComment.text %> </h4>
+            <h5> COMMENT By: <b><font color= #C64044> <%= thisComment.email %> </font></b></h5>
+            <br>
           </div> <% }) %>
 
           <form action="/postdir/<%= post._id %>/comment" method="post" role="form">
-            <div class="row">
 
+            <div class="row">
               <div class="form-group col-lg-12">
                 <label><h2 class="intro-text text-center">ADD
                   <strong>COMMENT</strong></h2></label>
-                <textarea class="form-control" rows="6" name=text placeholder="Comment"></textarea>
-              </div>
+                  <textarea class="form-control" rows="6" name=text placeholder="Comment"></textarea>
+                </div>
 
-              <div class="form-group col-lg-12">
-                <input type="hidden" name=email value=' <%= username %> '>
-                <button type="submit" class="btn btn-default">Submit Comment</button>
-              </div>
+                <div class="form-group col-lg-12">
+                  <input type="hidden" name=email value=' <%= username %> '>
+                  <button type="submit" class="btn btn-default">ADD COMMENT</button>
+                </div>
 
+              </div>
             </div>
           </div>
-        </div>
 
-      </div>
-      <!-- /.container -->
+        </div>
+        <!-- /.container -->

@@ -1,5 +1,5 @@
 //NOTE  ----------------logger-----------------//
-  var eyes           = require('eyespect');
+var eyes           = require('eyespect');
 
 var logger = function (req, res, next){
   eyes.inspect("--------------------REQ START-----------\n");
