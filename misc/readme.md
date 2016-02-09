@@ -3,7 +3,7 @@
       General Assembly
 
 #PACKAGES:
-  node.js, boostrap, mongoose, mongodb, jquery, express, express layouts, morgan, session, eyespect,
+  node.js, bootstrap, mongoose, mongodb, jquery, express, express layouts, morgan, session, eyespect,
 
 #PRODUCED ON:
   system76: pangolin performance
@@ -35,5 +35,8 @@
   fairly responsive
 
 # FUTURE IMPROVEMENTS:
+  give it more of a purpose.
   remove bulky bootstrap code.
   improve cross-platform responsiveness
+  fix the user comments
+  ...turn the link to my 'professional' links black and white?
